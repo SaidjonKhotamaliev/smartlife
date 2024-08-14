@@ -171,6 +171,7 @@ class MemberService {
 
     return await this.memberModel.findById(member._id).exec();
   }
+
   public async getUsers(): Promise<Member[]> {
     const result = await this.memberModel
       .find({ memberType: MemberType.USER })
@@ -180,6 +181,16 @@ class MemberService {
 
     return result;
   }
+
+  // public async getUser(): Promise<Member[]> {
+  //   const result = await this.memberModel
+  //     .find({ memberType: MemberType.USER })
+  //     .exec();
+  //   if (!result.length)
+  //     throw new Errors(HttpCode.NOT_FOUND, Message.NOT_DATA_FOUND);
+
+  //   return result;
+  // }
 
   public async updateChosenUser(input: MemberUpdateInput): Promise<Member[]> {
     input._id = shapeIntoMongooseObjectId(input._id);

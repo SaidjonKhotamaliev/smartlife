@@ -28,9 +28,15 @@
     <div class="restaurant-menu-frame">
       <div class="board">
         <div class="dishes-table">
-          <span class="new-dish-txt" style="margin-bottom: 30px">
-            RESTAURANT MENU
-          </span>
+          <div class="search-bar">
+            <span class="new-dish-txt">
+              SMARTLIFE PRODUCTS
+            </span>
+            <form action="http://localhost:8888/admin/product/all" method="POST">
+              <input type="text" name="search">
+              <button type="submit">SEARCH</button>
+            </form>
+          </div>
           <table class="table table-bordered table-hover">
             <thead class="thead-light">
               <tr class="thead-light">
@@ -131,39 +137,18 @@
             />
           </div>
         </div>
-        <div class="half-input-frame">
-          <div class="half-input">
+          <div class="long-input">
             <label>Product Type</label>
             <select class="product-collection" name="productCollection">
-              <option value="DISH" selected>Dish</option>
-              <option value="SALAD">Salad</option>
-              <option value="DESSERT">Dessert</option>
-              <option value="DRINK">Drink</option>
+              <option value="SMARTPHONE" selected>Smartphone</option>
+              <option value="SMARTWATCH">Smartwatch</option>
+              <option value="TABLET">Tablet</option>
+              <option value="HEADPHONE">Headphone</option>
+              <option value="LAPTOP">Laptop</option>
               <option value="OTHER">Other</option>
             </select>
           </div>
 
-          <div class="half-input" id="product-collection">
-            <label>Dish Volume</label>
-            <select class="product-size" name="productSize">
-              <option value="SMALL">Small</option>
-              <option value="NORMAL" selected>Normal</option>
-              <option value="LARGE">Large</option>
-              <option value="SET">Set</option>
-            </select>
-          </div>
-
-          <div class="half-input" id="product-volume" style="display: none">
-            <label>Drink Volume</label>
-            <select class="product-volume" name="productVolume">
-              <option value="0.5">0,5 liters</option>
-              <option value="1" selected>1 liters</option>
-              <option value="1.2">1,2 liters</option>
-              <option value="1.5">1,5 liters</option>
-              <option value="2">2 liters</option>
-            </select>
-          </div>
-        </div>
         <div class="long-input">
           <label>Product Description</label>
           <textarea name="productDesc" class="product-desc"></textarea>

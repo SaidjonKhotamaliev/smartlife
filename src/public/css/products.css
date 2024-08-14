@@ -62,6 +62,24 @@
   align-items: center;
 }
 
+.products-container .board .dishes-table .search-bar {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.products-container .board .dishes-table .search-bar form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .products-container .board .dish-container {
   position: relative;
   margin-top: 20px;

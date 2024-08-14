@@ -28,6 +28,11 @@ routerAdmin.get(
   productController.getAllProducts
 );
 routerAdmin.post(
+  "/product/all",
+  restaurantController.verifyRestaurant,
+  productController.getSearchedProduct
+);
+routerAdmin.post(
   "/product/create",
   restaurantController.verifyRestaurant,
   makeUploader("products").array("productImages", 5),
@@ -45,6 +50,11 @@ routerAdmin.get(
   restaurantController.verifyRestaurant,
   restaurantController.getUsers
 );
+// routerAdmin.post(
+//   "/user/all",
+//   restaurantController.verifyRestaurant,
+//   restaurantController.getUser
+// );
 routerAdmin.post(
   "/user/edit",
   restaurantController.verifyRestaurant,

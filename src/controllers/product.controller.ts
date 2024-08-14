@@ -67,6 +67,23 @@ productController.getAllProducts = async (req: Request, res: Response) => {
   }
 };
 
+productController.getSearchedProduct = async (req: Request, res: Response) => {
+  try {
+    console.log("getSearchedProduct");
+    console.log("req.body", req.body);
+
+    const data = await productService.getSearchedProduct(req.body.search);
+    console.log("data: ", data);
+
+    const products = [data];
+    res.render("products", { products });
+  } catch (err) {
+    console.log("Error, getSearchedProduct", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standart.code).json(Errors.standart);
+  }
+};
+
 productController.createNewProduct = async (
   req: AdminRequest,
   res: Response

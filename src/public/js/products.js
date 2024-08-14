@@ -61,6 +61,29 @@ $(function () {
       alert("Product update failed!");
     }
   });
+
+  $(".product-sale-input").on("keypress", async (e) => {
+    if (event.which === 13) {
+      const id = e.target.id,
+        productStatus = $(`#${id}.new-product-status`).val(),
+        productOnSale = $(`#${id}.product-sale-input`).val();
+
+      try {
+        const response = await axios.post(`/admin/product/${id}`, {
+          productOnSale: productOnSale,
+          productStatus: productStatus,
+        });
+        const result = response.data;
+        if (result) {
+          console.log("Product updated!");
+          location.reload();
+        } else alert("Product update failed!");
+      } catch (err) {
+        console.log(err);
+        alert("Product update failed!");
+      }
+    }
+  });
 });
 
 function validateForm() {

@@ -100,6 +100,17 @@ class ProductService {
     return result;
   }
 
+  public async getSearchedProduct(input: string): Promise<Product[]> {
+    const result = await this.productModel
+      .findOne({
+        productName: { $regex: new RegExp(input, "i") },
+      })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NOT_DATA_FOUND);
+
+    return result;
+  }
+
   public async createNewProduct(input: ProductInput): Promise<Product> {
     try {
       return await this.productModel.create(input);
