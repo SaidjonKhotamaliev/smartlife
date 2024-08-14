@@ -182,15 +182,17 @@ class MemberService {
     return result;
   }
 
-  // public async getUser(): Promise<Member[]> {
-  //   const result = await this.memberModel
-  //     .find({ memberType: MemberType.USER })
-  //     .exec();
-  //   if (!result.length)
-  //     throw new Errors(HttpCode.NOT_FOUND, Message.NOT_DATA_FOUND);
+  public async getUser(input: string): Promise<Member> {
+    const result = await this.memberModel
+      .findOne({
+        memberType: MemberType.USER,
+        memberNick: { $regex: new RegExp(input, "i") },
+      })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NOT_DATA_FOUND);
 
-  //   return result;
-  // }
+    return result;
+  }
 
   public async updateChosenUser(input: MemberUpdateInput): Promise<Member[]> {
     input._id = shapeIntoMongooseObjectId(input._id);

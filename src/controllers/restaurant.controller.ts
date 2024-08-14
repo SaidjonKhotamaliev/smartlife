@@ -121,14 +121,17 @@ restaurantController.getUsers = async (req: Request, res: Response) => {
 
 restaurantController.getUser = async (req: Request, res: Response) => {
   try {
-    console.log("getUsers");
-    console.log("req.body", req.body);
+    console.log("getUser");
+    console.log("req.bodu", req.body);
 
-    // const result = await memberService.getUser();
-    // res.render("users", { users: result });
+    const result = await memberService.getUser(req.body.search);
+    const users = [result];
+    res.render("users", { users });
   } catch (err) {
-    console.log("Error, getUsers", err);
-    res.redirect("/admin/login");
+    console.log("Error, getUser", err);
+    res.send(
+      `<script>alert("${err}"); window.location.replace("/admin/user/all");</script>`
+    );
   }
 };
 

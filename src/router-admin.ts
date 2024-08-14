@@ -50,11 +50,11 @@ routerAdmin.get(
   restaurantController.verifyRestaurant,
   restaurantController.getUsers
 );
-// routerAdmin.post(
-//   "/user/all",
-//   restaurantController.verifyRestaurant,
-//   restaurantController.getUser
-// );
+routerAdmin.post(
+  "/user/all",
+  restaurantController.verifyRestaurant,
+  restaurantController.getUser
+);
 routerAdmin.post(
   "/user/edit",
   restaurantController.verifyRestaurant,
