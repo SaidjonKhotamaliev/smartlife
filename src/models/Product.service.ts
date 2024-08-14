@@ -115,9 +115,17 @@ class ProductService {
     input: ProductUpdateInput
   ): Promise<Product> {
     id = shapeIntoMongooseObjectId(id);
-    const result = await this.productModel
+    let result = await this.productModel
       .findOneAndUpdate({ _id: id }, input, { new: true })
       .exec();
+    if (input.productOnSale) {
+      input.productSalePrice =
+        result.productPrice - (input.productOnSale * result.productPrice) / 100;
+
+      result = await this.productModel
+        .findOneAndUpdate({ _id: id }, input, { new: true })
+        .exec();
+    }
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
     console.log("result: ", result);
 

@@ -4,7 +4,7 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import { AdminRequest, ExtendedRequest } from "../libs/types/member";
 import { ProductInput, ProductInquiry } from "../libs/types/product";
-import { ProductCollection } from "../libs/enums/product.enum";
+import { ProductCollection, ProductStatus } from "../libs/enums/product.enum";
 
 const productController: T = {};
 
@@ -100,8 +100,22 @@ productController.createNewProduct = async (
 productController.updateChosenProduct = async (req: Request, res: Response) => {
   try {
     console.log("updateChosenProduct");
-    const id = req.params.id;
+    console.log("productStatus", req.body.productStatus);
 
+    const id = req.params.id;
+    if (req.body.productOnSale >= 100)
+      throw new Errors(
+        HttpCode.NOT_MODIFIED,
+        Message.YOU_CANNOT_GIVE_UP_THAT_MUCH_DISCOUNT
+      );
+
+    if (
+      req.body.productOnSale &&
+      req.body.productStatus !== ProductStatus.ONSALE
+    )
+      throw new Errors(HttpCode.NOT_MODIFIED, Message.NOT_ONSALE_PRODUCT);
+
+    console.log("PASSED HERE 1");
     const result = await productService.updateChosenProduct(id, req.body);
 
     res.status(HttpCode.OK).json({ data: result });

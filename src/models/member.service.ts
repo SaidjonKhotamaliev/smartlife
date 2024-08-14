@@ -128,6 +128,7 @@ class MemberService {
 
   /* BSSR */
   public async processSignup(input: MemberInput): Promise<Member> {
+    console.log("PASSED HERE 2");
     const exist = await this.memberModel
       .findOne({
         memberType: MemberType.RESTAURANT,
@@ -141,6 +142,7 @@ class MemberService {
 
     try {
       const result = await this.memberModel.create(input);
+
       result.memberPassword = "";
       return result;
     } catch (err) {

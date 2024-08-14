@@ -35,12 +35,13 @@
             <thead class="thead-light">
               <tr class="thead-light">
                 <th scope="col">T/r</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Product Type</th>
-                <th scope="col">Product Volume</th>
-                <th scope="col">Product Price</th>
-                <th scope="col">Product Left Count</th>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">Left</th>
+                <th scope="col">Price</th>
+                <th scope="col">Sale Price</th>
                 <th scope="col">Status</th>
+                <th scope="col">Sale %</th>
               </tr>
             </thead>
             <!--  LOOP PRODUCTS: START  -->
@@ -50,17 +51,22 @@
                   <td><%= key + 1 %></td>
                   <td><%= value.productName %></td>
                   <td><%= value.productCollection %></td>
-                  <td>
-                    <%= value.productCollection === "DRINK" ? value.productVolume : value.productSize %>
-                  </td>
-                  <td><%= value.productPrice %></td>
                   <td><%= value.productLeftCount %></td>
+                  <td><%= value.productPrice %></td>
+                  <td><%= value.productSalePrice %></td>
                   <td>
                     <select class="spec-select new-product-status" id="<%= value._id %>">
                       <option value="PAUSE" <%= value.productStatus === "PAUSE" ? "selected" : "" %>>PAUSE</option>
                       <option value="PROCESS" <%= value.productStatus === "PROCESS" ? "selected" : "" %>>PROCESS</option>
                       <option value="DELETE" <%= value.productStatus === "DELETE" ? "selected" : "" %>>DELETE</option>
+                      <option value="ONSALE" <%= value.productStatus === "ONSALE" ? "selected" : "" %>>ONSALE</option>
                     </select>
+                  </td>
+                  <td>
+                    <input id="<%= value._id %>" class="product-sale-input" type="number" placeholder=<%= value.productOnSale %>>
+                    <button id="<%= value._id %>" class="product-sale-btn" type="submit">OK</button>
+
+                    
                   </td>
                 </tr>
               </tbody>
