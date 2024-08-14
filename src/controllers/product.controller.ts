@@ -103,7 +103,7 @@ productController.updateChosenProduct = async (req: Request, res: Response) => {
     console.log("productStatus", req.body.productStatus);
 
     const id = req.params.id;
-    if (req.body.productOnSale >= 100)
+    if (req.body.productOnSale >= 100 || req.body.productOnSale < 0)
       throw new Errors(
         HttpCode.NOT_MODIFIED,
         Message.YOU_CANNOT_GIVE_UP_THAT_MUCH_DISCOUNT
