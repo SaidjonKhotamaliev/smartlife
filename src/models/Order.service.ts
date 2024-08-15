@@ -12,15 +12,18 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 import { ObjectId } from "mongoose";
 import MemberService from "./member.service";
 import { OrderStatus } from "../libs/enums/order.enum";
+import ProductModel from "../schema/Product.model";
 class OrderService {
   private readonly orderModel;
   private readonly orderItemModel;
   private readonly memberService;
+  private readonly productModel;
 
   constructor() {
     this.orderModel = OrderModel;
     this.orderItemModel = OrderItemModel;
     this.memberService = new MemberService();
+    this.productModel = ProductModel;
   }
   public async createOrder(
     member: Member,
@@ -30,7 +33,7 @@ class OrderService {
     const amount = input.reduce((accumulator: number, item: OrderItemInput) => {
       return accumulator + item.itemPrice * item.itemQuantity;
     }, 0);
-    const delivery = amount < 100 ? 5 : 0;
+    const delivery = 0;
 
     try {
       const newOrder: Order = await this.orderModel.create({
@@ -38,6 +41,7 @@ class OrderService {
         orderDelivery: delivery,
         memberId: memberId,
       });
+
       const orderId = newOrder._id;
       await this.recordOrderItem(orderId, input);
 
@@ -55,6 +59,20 @@ class OrderService {
       item.orderId = orderId;
       item.productId = shapeIntoMongooseObjectId(item.productId);
       await this.orderItemModel.create(item);
+      await this.productModel
+        .findByIdAndUpdate(
+          item.productId,
+          { $inc: { productOrders: +item.itemQuantity } },
+          { new: true }
+        )
+        .exec();
+      await this.productModel
+        .findByIdAndUpdate(
+          item.productId,
+          { $inc: { productLeftCount: -item.itemQuantity } },
+          { new: true }
+        )
+        .exec();
       return "Inserted";
     });
 

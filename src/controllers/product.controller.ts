@@ -79,8 +79,6 @@ productController.getSearchedProduct = async (req: Request, res: Response) => {
     res.render("products", { products });
   } catch (err) {
     console.log("Error, getSearchedProduct", err);
-    // if (err instanceof Errors) res.status(err.code).json(err);
-    // else res.status(Errors.standart.code).json(Errors.standart);
     res.send(
       `<script>alert("${err}"); window.location.replace("/admin/product/all");</script>`
     );
