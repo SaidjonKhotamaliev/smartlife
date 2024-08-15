@@ -25,16 +25,24 @@ class ProductService {
 
   // SPA
   public async getProducts(inquiry: ProductInquiry): Promise<Product[]> {
-    const match: T = {
-      productStatus: { $in: [ProductStatus.PROCESS, ProductStatus.ONSALE] },
-    };
-    console.log("match: ", match);
+    let match: T = {};
+
+    // Modify match based on inquiry.order
+    if (inquiry.order !== "productOnSale") {
+      match.productStatus = {
+        $in: [ProductStatus.PROCESS, ProductStatus.ONSALE],
+      };
+    } else {
+      match.productStatus = ProductStatus.ONSALE;
+    }
 
     if (inquiry.productCollection)
       match.productCollection = inquiry.productCollection;
     if (inquiry.search) {
       match.productName = { $regex: new RegExp(inquiry.search, "i") };
     }
+
+    console.log("match: ", match);
 
     const sort: T =
       inquiry.order === "productPrice"

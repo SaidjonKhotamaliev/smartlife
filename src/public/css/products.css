@@ -99,11 +99,7 @@ body {
 }
 
 .products-container .new-dish-txt {
-  font-family: "Source Serif Pro";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 25px;
+  font-size: 18px;
   color: #000;
 }
 
