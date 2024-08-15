@@ -7,7 +7,7 @@
     <div class="navigation-menu">
       <ul class="nav justify-content-center">
         <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link active" href="/admin/">Home</a>
+          <a class="nav-link" href="/admin/">Home</a>
         </li>
         <li class="nav-item" style="cursor: pointer">
           <a class="nav-link" href="/admin/product/all">Menu</a>
@@ -32,7 +32,7 @@
             <span class="new-dish-txt">
               SMARTLIFE PRODUCTS
             </span>
-            <form action="http://localhost:8888/admin/product/all" method="POST">
+            <form action="http://localhost:8888/admin/product/all" method="POST" class="search-form">
               <input type="text" name="search">
               <button type="submit">SEARCH</button>
             </form>
@@ -40,7 +40,7 @@
           <table class="table table-bordered table-hover">
             <thead class="thead-light">
               <tr class="thead-light">
-                <th scope="col">T/r</th>
+                <th scope="col">Num</th>
                 <th scope="col">Name</th>
                 <th scope="col">Type</th>
                 <th scope="col">Left</th>
@@ -59,7 +59,14 @@
                   <td><%= value.productCollection %></td>
                   <td><%= value.productLeftCount %></td>
                   <td><%= value.productPrice %></td>
-                  <td><%= value.productSalePrice %></td>
+                  <td>
+                    <% if (value.productOnSale !== 0) { %>
+                      <%= value.productSalePrice %>
+                    <% } else { %>
+                      N/A
+                    <% } %>
+                  </td>
+                  
                   <td>
                     <select class="spec-select new-product-status" id="<%= value._id %>">
                       <option value="PAUSE" <%= value.productStatus === "PAUSE" ? "selected" : "" %>>PAUSE</option>
@@ -151,7 +158,7 @@
 
         <div class="long-input">
           <label>Product Description</label>
-          <textarea name="productDesc" class="product-desc"></textarea>
+          <textarea name="productDesc" placeholder="Product Description" class="product-desc"></textarea>
         </div>
 
         <div class="img-frame">
@@ -222,6 +229,11 @@
       </div>
     </div>
   </div>
+
+  <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include your main.js script -->
+<script src="/js/main.js"></script>
 
   <script type="text/javascript" src="/js/products.js"></script>
 </body>
