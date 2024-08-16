@@ -81,6 +81,38 @@ class OrderService {
     console.log("orderItemstate", orderItemstate);
   }
 
+  private async recordProductLeft(orderId: ObjectId): Promise<void> {
+    console.log("OTDI 3");
+    orderId = shapeIntoMongooseObjectId(orderId);
+    const orderItems = await this.orderItemModel.find({ orderId: orderId });
+    console.log("OTDI 4");
+
+    console.log("orderItems: ", orderItems);
+
+    const promisedList = orderItems.map(async (item: OrderItemInput) => {
+      item.productId = shapeIntoMongooseObjectId(item.productId);
+      await this.productModel
+        .findByIdAndUpdate(
+          item.productId,
+          { $inc: { productOrders: +item.itemQuantity } },
+          { new: true }
+        )
+        .exec();
+      await this.productModel
+        .findByIdAndUpdate(
+          item.productId,
+          { $inc: { productLeftCount: -item.itemQuantity } },
+          { new: true }
+        )
+        .exec();
+      return "Inserted";
+    });
+
+    const orderItemstate = await Promise.all(promisedList);
+
+    console.log("orderItemstate", orderItemstate);
+  }
+
   public async getMyOrders(
     member: Member,
     inquiry: OrderInquiry
@@ -129,7 +161,13 @@ class OrderService {
         { new: true }
       )
       .exec();
+    console.log("OTDI 1");
+
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    console.log("OTDI 2");
+    await this.recordProductLeft(orderId);
+    console.log("OTDI 10");
 
     // orderStatus PAUSE => PROCESS points ++
     if (orderStatus === OrderStatus.PROCESS) {
