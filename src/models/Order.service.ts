@@ -161,16 +161,12 @@ class OrderService {
         { new: true }
       )
       .exec();
-    console.log("OTDI 1");
 
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
-    console.log("OTDI 2");
-    await this.recordProductLeft(orderId);
-    console.log("OTDI 10");
-
     // orderStatus PAUSE => PROCESS points ++
     if (orderStatus === OrderStatus.PROCESS) {
+      await this.recordProductLeft(orderId);
       await this.memberService.addUserPoint(member, 1);
     }
 
