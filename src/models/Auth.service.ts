@@ -11,6 +11,8 @@ class AuthService {
 
   public async createToken(payload: Member) {
     return new Promise((resolve, reject) => {
+      console.log("payload: ", payload);
+
       const duration = `${AUTH_TIMER}h`;
       jwt.sign(
         payload,

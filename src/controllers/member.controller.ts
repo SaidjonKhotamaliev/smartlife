@@ -109,9 +109,24 @@ memberController.getMemberDetail = async (
 memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
   try {
     console.log("updateMember");
+
     const input: MemberUpdateInput = req.body;
+    if (input.memberPassword === "") {
+      delete input.memberPassword;
+    }
+
     if (req.file) input.memberImage = req.file.path.replace(/\\/, "/");
     const result = await memberService.updateMember(req.member, input);
+
+    // res.cookie("accessToken", null, { maxAge: 0, httpOnly: true });
+    // const token = await authService.createToken(result);
+
+    // console.log("token", token);
+
+    // res.cookie("accessToken", token, {
+    //   maxAge: AUTH_TIMER * 3600 * 1000,
+    //   httpOnly: false,
+    // });
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {

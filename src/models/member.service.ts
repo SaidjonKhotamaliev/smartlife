@@ -88,6 +88,12 @@ class MemberService {
     input: MemberUpdateInput
   ): Promise<Member> {
     const memberId = shapeIntoMongooseObjectId(member._id);
+    if (input.memberPassword && input.memberPassword !== "") {
+      const salt = await bcrpyt.genSalt();
+      const hashedPassword = await bcrpyt.hash(input.memberPassword, salt);
+      input.memberPassword = hashedPassword;
+    }
+
     const result = this.memberModel
       .findOneAndUpdate({ _id: memberId }, input, { new: true })
       .exec();
