@@ -68,38 +68,36 @@ class ProductService {
     id: string
   ): Promise<Product> {
     const productId = shapeIntoMongooseObjectId(id);
-
     let result = await this.productModel
       .findOne({
         _id: productId,
-        productStatus: ProductStatus.PROCESS,
+        productStatus: { $in: [ProductStatus.PROCESS, ProductStatus.ONSALE] },
       })
       .exec();
-
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NOT_DATA_FOUND);
 
     // check view xistance
-    if (memberId) {
-      const input: ViewInput = {
-        memberId: memberId,
-        viewRefId: productId,
-        viewGroup: ViewGroup.PRODUCT,
-      };
-      const existView = await this.viewService.checkViewExistance(input);
-      if (!existView) {
-        // insert view
-        console.log("PLANNING TO INSERT NEW VIEW");
-        await this.viewService.insertMemberView(input);
-        // increase counts
-        result = await this.productModel
-          .findByIdAndUpdate(
-            productId,
-            { $inc: { productViews: +1 } },
-            { new: true }
-          )
-          .exec();
-      }
-    }
+    // if (memberId) {
+    //   const input: ViewInput = {
+    //     memberId: memberId,
+    //     viewRefId: productId,
+    //     viewGroup: ViewGroup.PRODUCT,
+    //   };
+    //   const existView = await this.viewService.checkViewExistance(input);
+    //   if (!existView) {
+    //     // insert view
+    //     console.log("PLANNING TO INSERT NEW VIEW");
+    //     await this.viewService.insertMemberView(input);
+    //     // increase counts
+    //     result = await this.productModel
+    //       .findByIdAndUpdate(
+    //         productId,
+    //         { $inc: { productViews: +1 } },
+    //         { new: true }
+    //       )
+    //       .exec();
+    //   }
+    // }
 
     return result;
   }
