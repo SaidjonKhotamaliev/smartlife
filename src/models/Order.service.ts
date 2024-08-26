@@ -59,20 +59,6 @@ class OrderService {
       item.orderId = orderId;
       item.productId = shapeIntoMongooseObjectId(item.productId);
       await this.orderItemModel.create(item);
-      await this.productModel
-        .findByIdAndUpdate(
-          item.productId,
-          { $inc: { productOrders: +item.itemQuantity } },
-          { new: true }
-        )
-        .exec();
-      await this.productModel
-        .findByIdAndUpdate(
-          item.productId,
-          { $inc: { productLeftCount: -item.itemQuantity } },
-          { new: true }
-        )
-        .exec();
       return "Inserted";
     });
 

@@ -24,6 +24,7 @@ export interface Product {
   productViews: number;
   prodcutOnSale?: number;
   productSalePrice?: number;
+  productOrders?: number;
   createdAt: Date;
   updatedAt: Date;
 }
