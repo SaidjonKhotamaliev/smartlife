@@ -42,11 +42,12 @@ class ProductService {
       match.productName = { $regex: new RegExp(inquiry.search, "i") };
     }
 
-    console.log("match: ", match);
-
     const sort: T =
       inquiry.order === "productPrice"
-        ? { [inquiry.order]: 1 }
+        ? {
+            productSalePrice: 1,
+            productPrice: 1,
+          }
         : { [inquiry.order]: -1 };
 
     const result = await this.productModel
