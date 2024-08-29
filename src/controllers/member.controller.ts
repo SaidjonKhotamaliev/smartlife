@@ -135,6 +135,24 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
+memberController.deleteMember = async (req: ExtendedRequest, res: Response) => {
+  try {
+    console.log("deleteMember");
+    console.log(req.body);
+
+    const input: MemberUpdateInput = req.body;
+    const result = await memberService.deleteMember(req.member, input);
+
+    res.cookie("accessToken", null, { maxAge: 0, httpOnly: true });
+
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error, deleteMember", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standart.code).json(Errors.standart);
+  }
+};
+
 memberController.getTopUsers = async (req: Request, res: Response) => {
   try {
     console.log("getTopUsers");

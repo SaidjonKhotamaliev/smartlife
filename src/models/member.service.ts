@@ -104,6 +104,24 @@ class MemberService {
     return result;
   }
 
+  public async deleteMember(
+    member: Member,
+    input: MemberUpdateInput
+  ): Promise<Member> {
+    const memberId = shapeIntoMongooseObjectId(member._id);
+    console.log("memberid", input);
+    input.memberStatus = MemberStatus.DELETE;
+
+    const result = this.memberModel
+      .findOneAndUpdate({ _id: input._id }, input, { new: true })
+      .lean()
+      .exec();
+
+    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    return result;
+  }
+
   public async getTopUsers(): Promise<Member[]> {
     const result = await this.memberModel
       .find({
