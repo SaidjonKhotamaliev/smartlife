@@ -30,24 +30,35 @@ class OrderService {
     input: OrderItemInput[]
   ): Promise<Order> {
     const memberId = shapeIntoMongooseObjectId(member._id);
+
+    // Calculate the total amount for the order
     const amount = input.reduce((accumulator: number, item: OrderItemInput) => {
       return accumulator + item.itemPrice * item.itemQuantity;
     }, 0);
     const delivery = 0;
 
+    // Fetch product details for all items in the order
     const products = await Promise.all(
       input.map(async (item) => {
         const product = await this.productModel.findOne({
           _id: item.productId,
         });
+
+        if (!product) {
+          throw new Errors(HttpCode.NOT_FOUND, Message.NOT_DATA_FOUND);
+        }
+
         return {
           productId: item.productId,
           itemQuantity: item.itemQuantity,
-          leftCount: product?.leftCount || 0,
+          leftCount: product.productLeftCount,
         };
       })
     );
 
+    console.log("check: ", products);
+
+    // Check if all ordered quantities are within stock limits
     const isOrderValid = products.every(
       (product) => product.itemQuantity <= product.leftCount
     );
@@ -58,6 +69,8 @@ class OrderService {
         Message.ITEM_QUANTITY_EXCEEDS_THE_LIMIT
       );
     }
+
+    // Proceed with the rest of the order processing logic...
 
     try {
       const newOrder: Order = await this.orderModel.create({
