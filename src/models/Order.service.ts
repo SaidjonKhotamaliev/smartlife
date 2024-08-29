@@ -35,6 +35,30 @@ class OrderService {
     }, 0);
     const delivery = 0;
 
+    const products = await Promise.all(
+      input.map(async (item) => {
+        const product = await this.productModel.findOne({
+          _id: item.productId,
+        });
+        return {
+          productId: item.productId,
+          itemQuantity: item.itemQuantity,
+          leftCount: product?.leftCount || 0,
+        };
+      })
+    );
+
+    const isOrderValid = products.every(
+      (product) => product.itemQuantity <= product.leftCount
+    );
+
+    if (!isOrderValid) {
+      throw new Errors(
+        HttpCode.BAD_REQUEST,
+        Message.ITEM_QUANTITY_EXCEEDS_THE_LIMIT
+      );
+    }
+
     try {
       const newOrder: Order = await this.orderModel.create({
         orderTotal: amount + delivery,

@@ -12,6 +12,7 @@ const orderService = new OrderService();
 orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
   try {
     console.log("createOrder");
+    console.log("req.body", req.body);
     const result = await orderService.createOrder(req.member, req.body);
 
     res.status(HttpCode.CREATED).json(result);

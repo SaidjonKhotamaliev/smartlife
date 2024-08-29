@@ -16,6 +16,7 @@ export enum Message {
   UPDATE_FAILED = "Update is failed!",
   BLOCKED_USER = "You have been blocked, contact restaurant",
 
+  ITEM_QUANTITY_EXCEEDS_THE_LIMIT = "There is no that much product in our stock that you want to order!",
   YOU_CANNOT_GIVE_UP_THAT_MUCH_DISCOUNT = "You tried to give up more discount than you expected!",
   USED_NICK_PHONE = "You are using already used nick or phone number!",
   NO_MEMBER_NICK = "No member with that member nick!",
