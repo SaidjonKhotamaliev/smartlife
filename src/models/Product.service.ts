@@ -89,7 +89,7 @@ class ProductService {
 
   public async getSearchedProduct(input: string): Promise<Product[]> {
     const result = await this.productModel
-      .findOne({
+      .find({
         productName: { $regex: new RegExp(input, "i") },
       })
       .exec();

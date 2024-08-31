@@ -72,10 +72,8 @@ productController.getSearchedProduct = async (req: Request, res: Response) => {
     console.log("getSearchedProduct");
     console.log("req.body", req.body);
 
-    const data = await productService.getSearchedProduct(req.body.search);
-    console.log("data: ", data);
+    const products = await productService.getSearchedProduct(req.body.search);
 
-    const products = [data];
     res.render("products", { products });
   } catch (err) {
     console.log("Error, getSearchedProduct", err);
