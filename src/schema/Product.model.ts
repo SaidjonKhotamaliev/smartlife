@@ -40,6 +40,10 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
+    productCombinedPrice: {
+      type: Number,
+      default: 0,
+    },
     productOnSale: {
       type: Number,
       default: 0,

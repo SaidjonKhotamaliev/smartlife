@@ -45,8 +45,7 @@ class ProductService {
     const sort: T =
       inquiry.order === "productPrice"
         ? {
-            productSalePrice: 1,
-            productPrice: 1,
+            productCombinedPrice: 1,
           }
         : { [inquiry.order]: -1 };
 
@@ -77,29 +76,6 @@ class ProductService {
       .exec();
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NOT_DATA_FOUND);
 
-    // check view xistance
-    // if (memberId) {
-    //   const input: ViewInput = {
-    //     memberId: memberId,
-    //     viewRefId: productId,
-    //     viewGroup: ViewGroup.PRODUCT,
-    //   };
-    //   const existView = await this.viewService.checkViewExistance(input);
-    //   if (!existView) {
-    //     // insert view
-    //     console.log("PLANNING TO INSERT NEW VIEW");
-    //     await this.viewService.insertMemberView(input);
-    //     // increase counts
-    //     result = await this.productModel
-    //       .findByIdAndUpdate(
-    //         productId,
-    //         { $inc: { productViews: +1 } },
-    //         { new: true }
-    //       )
-    //       .exec();
-    //   }
-    // }
-
     return result;
   }
 
@@ -124,6 +100,7 @@ class ProductService {
 
   public async createNewProduct(input: ProductInput): Promise<Product> {
     try {
+      input.productCombinedPrice = input.productPrice;
       return await this.productModel.create(input);
     } catch (err) {
       console.error("Error model: createNewProduct", err);
@@ -141,13 +118,20 @@ class ProductService {
       .findOneAndUpdate({ _id: id }, input, { new: true })
       .exec();
     if (input.productOnSale) {
-      input.productSalePrice =
-        result.productPrice - (input.productOnSale * result.productPrice) / 100;
-
-      result = await this.productModel
-        .findOneAndUpdate({ _id: id }, input, { new: true })
-        .exec();
+      {
+        input.productSalePrice =
+          result.productPrice -
+          (input.productOnSale * result.productPrice) / 100;
+        input.productCombinedPrice = input.productSalePrice;
+      }
+    } else if (input.productOnSale === 0) {
+      input.productSalePrice = 0;
+      input.productCombinedPrice = input.productPrice;
     }
+    result = await this.productModel
+      .findOneAndUpdate({ _id: id }, input, { new: true })
+      .exec();
+
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
     console.log("result: ", result);
 

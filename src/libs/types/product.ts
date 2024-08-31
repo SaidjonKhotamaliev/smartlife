@@ -10,6 +10,9 @@ export interface ProductInput {
   productDesc?: string;
   productImages?: string[];
   productViews?: number;
+  prodcutOnSale?: number;
+  productSalePrice?: number;
+  productCombinedPrice?: number;
 }
 
 export interface Product {
@@ -24,6 +27,7 @@ export interface Product {
   productViews: number;
   prodcutOnSale?: number;
   productSalePrice?: number;
+  productCombinedPrice: number;
   productOrders?: number;
   createdAt: Date;
   updatedAt: Date;
@@ -41,6 +45,7 @@ export interface ProductUpdateInput {
   productViews?: number;
   productOnSale?: number;
   productSalePrice?: number;
+  productCombinedPrice?: number;
 }
 
 export interface ProductInquiry {
