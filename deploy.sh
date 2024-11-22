@@ -10,9 +10,9 @@ npm run build
 pm2 start process.config.js --env production
 
 #DEVELOP
-git reset --hard
-git checkout develop
-git pull origin develop
+# git reset --hard
+# git checkout develop
+# git pull origin develop
 
-npm i
-pm2 start "npm run start:dev" --name=SMARTLIFE
+# npm i
+# pm2 start "npm run start:dev" --name=SMARTLIFE
